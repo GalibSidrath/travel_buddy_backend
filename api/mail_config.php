@@ -1,10 +1,6 @@
 <?php
 /**
  * SMTP Mail Server Configuration for Travel Buddy
- * 
- * Gmail SMTP Configuration:
- * 1. Requires 2-Step Verification enabled on the Google Account.
- * 2. Generate a 16-character App Password at: https://myaccount.google.com/apppasswords
  */
 return [
     'smtp_host'   => 'smtp.gmail.com',
