@@ -1,0 +1,734 @@
+{
+  "info": {
+    "_postman_id": "a91f582b-871d-4eb2-a9b3-149d3246eb79",
+    "name": "Travel Buddy API (Local XAMPP)",
+    "description": "Complete professional Postman collection for Travel Buddy Backend API (PHP + MySQL on Local XAMPP). Includes auto-token capture on Login/Registration.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost/travel_buddy/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "description": "User registration, login, logout, OTP password recovery, and password change.",
+      "item": [
+        {
+          "name": "User Registration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.token) {",
+                  "        pm.collectionVariables.set('token', json.token);",
+                  "        console.log('Token saved automatically from Registration!');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_traveler\",\n  \"full_name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"pass123456\",\n  \"gender\": \"Male\",\n  \"country\": \"Bangladesh\",\n  \"dob\": \"2000-01-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/registration",
+              "host": ["{{base_url}}"],
+              "path": ["registration"]
+            },
+            "description": "Register a new user account. Supports both JSON and multipart/form-data with profile_pic and nid_pic."
+          }
+        },
+        {
+          "name": "User Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var json = pm.response.json();",
+                  "    if (json.token) {",
+                  "        pm.collectionVariables.set('token', json.token);",
+                  "        console.log('Token saved automatically from Login!');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"galib\",\n  \"password\": \"pass123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login with username or email + password. Returns JWT token which is automatically saved to {{token}}."
+          }
+        },
+        {
+          "name": "User Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": ["{{base_url}}"],
+              "path": ["logout"]
+            },
+            "description": "Terminate session and clear client token."
+          }
+        },
+        {
+          "name": "Forgot Password (Send OTP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"abdmgalib2001@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/forgot_password",
+              "host": ["{{base_url}}"],
+              "path": ["forgot_password"]
+            },
+            "description": "Sends a 6-digit OTP to the registered user email address via SMTP."
+          }
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"abdmgalib2001@gmail.com\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/verify_otp",
+              "host": ["{{base_url}}"],
+              "path": ["verify_otp"]
+            },
+            "description": "Verifies 6-digit OTP and returns a 10-minute reset_token."
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"abdmgalib2001@gmail.com\",\n  \"otp\": \"123456\",\n  \"new_password\": \"newSecretPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reset_password",
+              "host": ["{{base_url}}"],
+              "path": ["reset_password"]
+            },
+            "description": "Resets forgotten password using either (email + otp) or reset_token."
+          }
+        },
+        {
+          "name": "Change Password (Logged In)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"oldPass123\",\n  \"new_password\": \"newPass456\",\n  \"confirm_password\": \"newPass456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/change_password",
+              "host": ["{{base_url}}"],
+              "path": ["change_password"]
+            },
+            "description": "Change password for logged in user by verifying existing password."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. User Profile",
+      "description": "Get profile with live statistics and edit user information.",
+      "item": [
+        {
+          "name": "Get Profile (Logged In User)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": ["{{base_url}}"],
+              "path": ["profile"]
+            },
+            "description": "Returns user profile, total_hosted_trips, total_joined_trips, and pending_requests_count (for the chip)."
+          }
+        },
+        {
+          "name": "Get Profile by Username",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profile?username=galib",
+              "host": ["{{base_url}}"],
+              "path": ["profile"],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "galib"
+                }
+              ]
+            },
+            "description": "Public profile lookup for any username."
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Abdullah M Galib\",\n  \"country\": \"Bangladesh\",\n  \"gender\": \"Male\",\n  \"dob\": \"2000-07-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/update_profile",
+              "host": ["{{base_url}}"],
+              "path": ["update_profile"]
+            },
+            "description": "Updates full_name, country, gender, dob, profile_pic (Multipart file or Base64). Deletes old image from server automatically."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Trips",
+      "description": "Create trips, view all trips, and filter by categories.",
+      "item": [
+        {
+          "name": "Create Trip",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Bandarban Mountain Trekking\",\n  \"destination\": \"Bandarban, Bangladesh\",\n  \"start_day\": \"2026-11-25\",\n  \"end_day\": \"2026-11-29\",\n  \"budget\": 7500,\n  \"category\": \"adventure\",\n  \"transport_method\": \"Chander Gari\",\n  \"description\": \"Trekking to Nilgiri and Nafakhum waterfall.\",\n  \"total_seats\": 10,\n  \"available_seats\": 10\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/create_trip",
+              "host": ["{{base_url}}"],
+              "path": ["create_trip"]
+            },
+            "description": "Creates a new trip hosted by the authenticated user."
+          }
+        },
+        {
+          "name": "Get All Trips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/all_trips",
+              "host": ["{{base_url}}"],
+              "path": ["all_trips"]
+            },
+            "description": "Fetches all trips sorted newest first."
+          }
+        },
+        {
+          "name": "Get Trips by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/category_trips?category=adventure",
+              "host": ["{{base_url}}"],
+              "path": ["category_trips"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "adventure",
+                  "description": "Allowed: adventure, beach, cultural, family, romantic, wildlife"
+                }
+              ]
+            },
+            "description": "Filter trips by category (adventure, beach, cultural, family, romantic, wildlife)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Trip Join Requests",
+      "description": "Join requests, host pending requests list for modal, accept and reject flows.",
+      "item": [
+        {
+          "name": "Join Trip (Send Request)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/join_trip",
+              "host": ["{{base_url}}"],
+              "path": ["join_trip"]
+            },
+            "description": "Traveler sends join request for a trip. Status is 'pending'."
+          }
+        },
+        {
+          "name": "Get Pending Requests (For Host Modal)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/pending_requests",
+              "host": ["{{base_url}}"],
+              "path": ["pending_requests"]
+            },
+            "description": "Host opens the 'View Pending Requests' modal to see all pending join requests with requester names, avatars, and request_ids."
+          }
+        },
+        {
+          "name": "Accept Join Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accept_request",
+              "host": ["{{base_url}}"],
+              "path": ["accept_request"]
+            },
+            "description": "Host accepts join request. Automatically decrements available_seats by 1 and inserts into confirm_trip."
+          }
+        },
+        {
+          "name": "Reject Join Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reject_request",
+              "host": ["{{base_url}}"],
+              "path": ["reject_request"]
+            },
+            "description": "Host rejects join request. Sets status to 'rejected'."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Comments & Replies",
+      "description": "Nested comment and reply system for trips.",
+      "item": [
+        {
+          "name": "Add Top-level Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip_id\": 4,\n  \"comment_text\": \"How many days will we spend in Jaflong?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/add_comment",
+              "host": ["{{base_url}}"],
+              "path": ["add_comment"]
+            },
+            "description": "Posts a top-level comment (parent_id is NULL)."
+          }
+        },
+        {
+          "name": "Reply to Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parent_id\": 1,\n  \"comment_text\": \"We will spend 2 full days in Jaflong!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reply_comment",
+              "host": ["{{base_url}}"],
+              "path": ["reply_comment"]
+            },
+            "description": "Replies to a specific comment. parent_id is set to target comment's id."
+          }
+        },
+        {
+          "name": "Get Comments & Nested Replies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/get_comments?trip_id=4",
+              "host": ["{{base_url}}"],
+              "path": ["get_comments"],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "4"
+                }
+              ]
+            },
+            "description": "Fetches top-level comments and nested replies tree for a trip."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Bookmarks",
+      "description": "Trip bookmarking, user bookmarks list, and unbookmark/remove.",
+      "item": [
+        {
+          "name": "Add Bookmark",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/add_bookmark",
+              "host": ["{{base_url}}"],
+              "path": ["add_bookmark"]
+            },
+            "description": "Bookmarks a trip for the authenticated user."
+          }
+        },
+        {
+          "name": "My Bookmarks List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/my_bookmarks",
+              "host": ["{{base_url}}"],
+              "path": ["my_bookmarks"]
+            },
+            "description": "Fetches all bookmarked trips of the user with full trip & host details."
+          }
+        },
+        {
+          "name": "Remove / Undo Bookmark",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/remove_bookmark",
+              "host": ["{{base_url}}"],
+              "path": ["remove_bookmark"]
+            },
+            "description": "Removes bookmark using trip_id (or bookmark_id)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Chat & Messenger",
+      "description": "Full messenger with inbox rooms, unread counts, auto-seen, and smart polling.",
+      "item": [
+        {
+          "name": "Start / Get Chat Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trip_id\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/start_chat",
+              "host": ["{{base_url}}"],
+              "path": ["start_chat"]
+            },
+            "description": "Opens existing chat room or initializes a new chat room between traveler and host."
+          }
+        },
+        {
+          "name": "Get Chat Rooms (Inbox List)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/chat_rooms",
+              "host": ["{{base_url}}"],
+              "path": ["chat_rooms"]
+            },
+            "description": "Returns Messenger inbox rooms with partner name, avatar, latest message preview, and unseen_count for badge/chip."
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_id\": 1,\n  \"message_text\": \"Hello, is there any update on the itinerary?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/send_message",
+              "host": ["{{base_url}}"],
+              "path": ["send_message"]
+            },
+            "description": "Sends message into chat room with seen_status = 0."
+          }
+        },
+        {
+          "name": "Get Messages (Chat Screen & Auto-Seen)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/get_messages?room_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["get_messages"],
+              "query": [
+                {
+                  "key": "room_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Loads conversation history. Automatically updates unread messages from partner to seen_status = 1."
+          }
+        },
+        {
+          "name": "Get Messages (Smart Polling for Provider)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/get_messages?room_id=1&last_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["get_messages"],
+              "query": [
+                {
+                  "key": "room_id",
+                  "value": "1"
+                },
+                {
+                  "key": "last_id",
+                  "value": "1",
+                  "description": "ID of last received message. Returns only new messages."
+                }
+              ]
+            },
+            "description": "Smart polling endpoint for Flutter Stream/Timer. Returns only messages where id > last_id."
+          }
+        }
+      ]
+    }
+  ]
+}
