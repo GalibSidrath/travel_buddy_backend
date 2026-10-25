@@ -90,6 +90,28 @@ switch ($route_normalized) {
         require_once 'routes/trips/create.php';
         break;
 
+    case 'update_trip':
+    case 'updatetrip':
+    case 'trip/update':
+    case 'trips/update':
+    case 'edit_trip':
+    case 'edittrip':
+    case 'trip/edit':
+    case 'trips/edit':
+        require_once 'routes/trips/update.php';
+        break;
+
+    case 'delete_trip':
+    case 'deletetrip':
+    case 'trip/delete':
+    case 'trips/delete':
+    case 'remove_trip':
+    case 'removetrip':
+    case 'trip/remove':
+    case 'trips/remove':
+        require_once 'routes/trips/delete.php';
+        break;
+
     case 'all_trips':
     case 'alltrips':
     case 'trips':
@@ -236,7 +258,7 @@ switch ($route_normalized) {
         http_response_code(404);
         echo json_encode([
             "status" => "error", 
-            "message" => "404 - Route '$raw_route' not found! Available routes: registration, login, logout, forgot_password, verify_otp, reset_password, change_password, create_trip, all_trips, category_trips, join_trip, accept_request, reject_request, pending_requests, profile, update_profile, add_comment, reply_comment, get_comments, add_bookmark, my_bookmarks, remove_bookmark, start_chat, send_message, get_messages, chat_rooms"
+            "message" => "404 - Route '$raw_route' not found! Available routes: registration, login, logout, forgot_password, verify_otp, reset_password, change_password, create_trip, update_trip, delete_trip, all_trips, category_trips, join_trip, accept_request, reject_request, pending_requests, profile, update_profile, add_comment, reply_comment, get_comments, add_bookmark, my_bookmarks, remove_bookmark, start_chat, send_message, get_messages, chat_rooms"
         ]);
         break;
 }
