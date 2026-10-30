@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 13, 2026 at 06:48 PM
+-- Generation Time: Oct 30, 2026 at 09:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -54,7 +54,10 @@ CREATE TABLE `chat_room` (
 
 INSERT INTO `chat_room` (`id`, `trip_id`, `username`, `host_username`, `created_at`) VALUES
 (1, 4, 'galib', 'tanjim_traveler', '2026-10-10 15:13:12'),
-(2, 4, 'new_traveler', 'tanjim_traveler', '2026-10-10 15:31:46');
+(2, 4, 'new_traveler', 'tanjim_traveler', '2026-10-10 15:31:46'),
+(3, 5, 'galibsidrath', 'new_traveler', '2026-10-30 05:41:19'),
+(4, 1, 'galibsidrath', 'galib', '2026-10-30 05:42:12'),
+(5, 3, 'galibsidrath', 'galib', '2026-10-30 06:41:39');
 
 -- --------------------------------------------------------
 
@@ -99,7 +102,17 @@ INSERT INTO `message` (`id`, `room_id`, `sender_username`, `message_text`, `seen
 (1, 1, 'tanjim_traveler', 'Hey Galib! Welcome to the Sylhet Tour chat room!', 1, '2026-10-10 15:13:12'),
 (2, 1, 'galib', 'Thanks Tanjim! Excited to be joining!', 1, '2026-10-10 15:13:12'),
 (3, 1, 'tanjim_traveler', 'Hey Galib! Welcome to the Sylhet Tour chat room!', 1, '2026-10-10 15:13:29'),
-(4, 1, 'galib', 'Thanks Tanjim! Excited to be joining!', 1, '2026-10-10 15:13:29');
+(4, 1, 'galib', 'Thanks Tanjim! Excited to be joining!', 1, '2026-10-10 15:13:29'),
+(6, 3, 'galibsidrath', 'Hi Brother! what up?', 0, '2026-10-30 05:41:31'),
+(7, 4, 'galibsidrath', 'Hi', 1, '2026-10-30 05:42:25'),
+(8, 4, 'galib', 'How are You?', 1, '2026-10-30 05:44:57'),
+(9, 4, 'galibsidrath', 'I am very good', 1, '2026-10-30 05:45:20'),
+(10, 4, 'galibsidrath', 'Do you need anything?', 1, '2026-10-30 05:50:00'),
+(11, 4, 'galib', 'Give me some money', 1, '2026-10-30 05:50:20'),
+(12, 4, 'galibsidrath', 'how much do you needs?', 1, '2026-10-30 05:51:07'),
+(13, 5, 'galibsidrath', 'hey', 1, '2026-10-30 06:41:45'),
+(14, 4, 'galib', '500k', 1, '2026-10-30 06:56:35'),
+(15, 4, 'galibsidrath', 'no can do', 0, '2026-10-30 07:48:43');
 
 -- --------------------------------------------------------
 
@@ -112,13 +125,6 @@ CREATE TABLE `password_reset` (
   `otp` varchar(6) NOT NULL,
   `expires_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `password_reset`
---
-
-INSERT INTO `password_reset` (`email`, `otp`, `expires_at`) VALUES
-('abdmgalib2001@gmail.com', '882945', '2026-10-10 21:36:40');
 
 -- --------------------------------------------------------
 
@@ -145,7 +151,10 @@ INSERT INTO `trip_comment` (`id`, `trip_id`, `username`, `parent_id`, `comment_t
 (3, 4, 'galib', NULL, 'Testing comment from Galib token via automated test!', '2026-10-10 13:57:39'),
 (4, 4, 'galib', 3, 'Automated reply to comment ID 3!', '2026-10-10 13:57:39'),
 (5, 4, 'new_traveler', NULL, 'How many days will we spend in Jaflong?', '2026-10-10 15:31:45'),
-(6, 4, 'new_traveler', 1, 'We will spend 2 full days in Jaflong!', '2026-10-10 15:31:46');
+(6, 4, 'new_traveler', 1, 'We will spend 2 full days in Jaflong!', '2026-10-10 15:31:46'),
+(7, 1, 'galibsidrath', NULL, 'Hello', '2026-10-30 05:16:28'),
+(8, 1, 'galibsidrath', 7, 'galibsidrath What up?', '2026-10-30 05:16:41'),
+(9, 5, 'galibsidrath', NULL, 'oh wow', '2026-10-30 07:49:05');
 
 -- --------------------------------------------------------
 
@@ -203,7 +212,8 @@ INSERT INTO `trip_request` (`id`, `trip_id`, `username`, `status`, `created_at`)
 (2, 2, 'galib123', 'accepted', '2026-10-10 12:57:03'),
 (3, 4, 'galib', 'pending', '2026-10-10 13:02:57'),
 (4, 3, 'tanjim_traveler', 'pending', '2026-10-10 15:17:47'),
-(5, 4, 'new_traveler', 'pending', '2026-10-10 15:31:45');
+(5, 4, 'new_traveler', 'pending', '2026-10-10 15:31:45'),
+(6, 5, 'galibsidrath', 'pending', '2026-10-30 07:49:12');
 
 -- --------------------------------------------------------
 
@@ -229,6 +239,7 @@ CREATE TABLE `user_info` (
 INSERT INTO `user_info` (`username`, `full_name`, `email`, `gender`, `country`, `dob`, `profile_pic`, `nid_pic`) VALUES
 ('galib', 'Abdullah Mohd. Galib', 'abdmgalib2001@gmail.com', 'Male', 'Bangladesh', '2000-07-01', 'galib_profile_1791638858_6aca3d4a1ed07.png', 'galib_nid_1791612369_6ac9d5d1dd131.jpg'),
 ('galib123', 'Abd M Galib', 'galib@example.com', 'Male', 'Bangladesh', '1998-05-15', 'galib123_profile_1791610847_6ac9cfdfae519.jpg', 'galib123_nid_1791610847_6ac9cfdfae6bb.jpg'),
+('galibsidrath', 'Galib Sidrath', 'galibsidrath1998@gmail.com', 'Male', 'Bangladesh', '2000-01-01', 'galibsidrath_profile_1792938755_6ade13039bc87.jpg', 'galibsidrath_nid_1792934176_6ade0120a5d31.jpg'),
 ('new_traveler', 'Abdullah M Galib', 'john@example.com', 'Male', 'Bangladesh', '2000-07-01', NULL, NULL),
 ('tanjim_traveler', 'Tanjim Ahmed', 'tanjim.travel@gmail.com', 'Male', 'Bangladesh', '2000-08-20', 'tanjim_traveler_profile_1791611581_6ac9d2bd2b6fd.jpg', 'tanjim_traveler_nid_1791611581_6ac9d2bd2b89d.jpg');
 
@@ -248,8 +259,9 @@ CREATE TABLE `user_login` (
 --
 
 INSERT INTO `user_login` (`username`, `password`) VALUES
-('galib', '$2y$10$XstmceTIOhJsk2lTr52hY.Po4Sf3a51lmlgDLPRL02IEEzswnOhRu'),
+('galib', '$2y$10$pahuz5rekBITVHBsZzF9jumBLPfDg1ekmd8M/LzvrCeS4ALOU.mHe'),
 ('galib123', '$2y$10$Ez9Fq17Q7D0HGZ0R8450Bu9jVeRaqKBnh27/7BinF07D7LS2oTEsC'),
+('galibsidrath', '$2y$10$jE9W2GSJJbL0axyHVjxV1.iYVaM7NskLWyWpFwTxHh3XkwfCUpPxq'),
 ('new_traveler', '$2y$10$kZj2MubWwWCfEzmtvz1.6.MATvCjLizkoGK3bYnCdR6HnXOvw.Mi6'),
 ('tanjim_traveler', '$2y$10$GsYjk9Lx8yhXoE0nTmrBWOJpmkgaapNN/yyUMyfwxoZSG9Z3J1RYm');
 
@@ -347,7 +359,7 @@ ALTER TABLE `bookmark`
 -- AUTO_INCREMENT for table `chat_room`
 --
 ALTER TABLE `chat_room`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `confirm_trip`
@@ -359,25 +371,25 @@ ALTER TABLE `confirm_trip`
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `trip_comment`
 --
 ALTER TABLE `trip_comment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `trip_info`
 --
 ALTER TABLE `trip_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `trip_request`
 --
 ALTER TABLE `trip_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
